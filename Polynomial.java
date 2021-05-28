@@ -5,8 +5,9 @@ public class Polynomial {
     public static void main(String[] args) {
         Node polynomial1 = null;
         Node polynomial2 = null;
+        Node polynomial3 = null;
         int selection = 1;
-        while(selection != 3) {
+        while(selection != 5) {
             System.out.print("Enter 1 to enter first polynomial.\n" +
                              "Enter 2 to enter second polynomial.\n" +
                              "Enter 3 to quit.\n" +
@@ -28,8 +29,30 @@ public class Polynomial {
                 int e = keyboard.nextInt();
                 polynomial2 = addTerm(polynomial2, c, e);
             }
-
             if(selection == 3) {
+                //TODO
+            }
+
+            if(selection == 4) {
+                //TODO
+            }
+
+            if(selection == 5) {
+                //TODO
+            }
+
+            if(selection == 6) {
+                //TODO
+            }
+
+            if(selection == 7) {
+                //TODO
+            }
+
+            if(selection == 8) {
+                //TODO
+            }
+            if(selection == 5) {
                 System.exit(0);
             }
 
@@ -69,6 +92,17 @@ public class Polynomial {
             tail = tail.next;
         }
         return returnPoly.next;
+    }
+
+    private static Node deleteTerm(Node head, int index) {
+        //TODO
+        return head;
+    }
+
+    private static Node addPolynomials(Node poly1, Node poly2) {
+        //TODO
+        Node poly3 = null;
+        return poly3;
     }
 
     private static void print(Node head) {
