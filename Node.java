@@ -23,4 +23,5 @@ public class Node {
     public int getExponent() {
         return exponent;
     }
+
 }
