@@ -10,7 +10,13 @@ public class Polynomial {
         while(selection != 5) {
             System.out.print("Enter 1 to enter first polynomial.\n" +
                              "Enter 2 to enter second polynomial.\n" +
-                             "Enter 3 to quit.\n" +
+                             "Enter 3 to  delete term from polynomial 1 \n" +
+                             "Enter 4 to delete a term from polynomial 2 \n" +
+                             "Enter 5" +
+                             "Enter 6" +
+                             "Enter 7" +
+                             "Enter 8" +
+                             "Enter 9  to quit.\n" +
                              "Selection: ");
             selection = keyboard.nextInt();
 
@@ -30,11 +36,15 @@ public class Polynomial {
                 polynomial2 = addTerm(polynomial2, c, e);
             }
             if(selection == 3) {
-                //TODO
+                System.out.print("Enter the exponent of term to be deleted: ");
+                int e = keyboard.nextInt();
+                polynomial1 = deleteTerm(polynomial1,e);
             }
 
             if(selection == 4) {
-                //TODO
+                System.out.print("Enter the exponent of term to be deleted: ");
+                int e = keyboard.nextInt();
+                polynomial2 = deleteTerm(polynomial2,e);
             }
 
             if(selection == 5) {
@@ -52,7 +62,7 @@ public class Polynomial {
             if(selection == 8) {
                 //TODO
             }
-            if(selection == 5) {
+            if(selection == 9) {
                 System.exit(0);
             }
 
@@ -71,12 +81,10 @@ public class Polynomial {
                 tail.next = temp;
                 break;
             }
-
             if (temp == null) {
                 tail.next = head;
                 break;
             }
-
             if (head.getExponent() < temp.getExponent()) {
                 tail.next = temp;
                 temp = temp.next;
@@ -94,8 +102,24 @@ public class Polynomial {
         return returnPoly.next;
     }
 
-    private static Node deleteTerm(Node head, int index) {
-        //TODO
+    private static Node deleteTerm(Node head, int e) {
+        Node prev, pointer;
+        pointer = head;
+        prev = null;
+
+        if (pointer != null && pointer.getExponent() == e) {
+            head = pointer.next;
+            return head;
+        }
+        while (pointer != null &&  pointer.getExponent() != e) {
+            prev = pointer;
+            pointer = pointer.next;
+        }
+        if (pointer == null) {
+            System.out.println("No term with exponent of " + e + " was found.");
+            return head;
+        }
+        prev.next = pointer.next;
         return head;
     }
 
