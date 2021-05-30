@@ -13,10 +13,11 @@ public class Polynomial {
                              "Enter 3 to  delete term from polynomial 1.\n" +
                              "Enter 4 to delete a term from polynomial 2.\n" +
                              "Enter 5 to get the sum of the polynomials.\n" +
-                             "Enter 6 to get the difference of the polynomials\n" +
-                             "Enter 7 to get the product of the polynomials\n" +
-                             "Enter 8 \n" +
-                             "Enter 9  to quit.\n" +
+                             "Enter 6 to get the difference of the polynomials.\n" +
+                             "Enter 7 to get the product of the polynomials.\n" +
+                             "Enter 8 to get the quotient of the polynomials.\n" +
+                             "Enter 9 to erase polynomials.\n" +
+                             "Enter 10 to quit.\n" +
                              "Selection: ");
             selection = keyboard.nextInt();
             if(selection == 1) {
@@ -57,12 +58,25 @@ public class Polynomial {
                 print(difference);
             }
             if(selection == 7) {
-                //TODO
+                int polynomial1Size = size(polynomial1);
+                int polynomial2Size = size(polynomial2);
+                Node productPolynomial;
+                if(polynomial1Size < polynomial2Size || polynomial1Size == polynomial2Size) {
+                    productPolynomial = multiplyPolynomials(polynomial1, polynomial2);
+                }else {
+                    productPolynomial = multiplyPolynomials(polynomial2, polynomial1);
+                }
+                System.out.print("Product: ");
+                print(productPolynomial);
             }
             if(selection == 8) {
                 //TODO
             }
             if(selection == 9) {
+                polynomial1 = null;
+                polynomial2 = null;
+            }
+            if(selection == 10) {
                 System.exit(0);
             }
             System.out.print("Poly 1: ");
@@ -165,9 +179,36 @@ public class Polynomial {
         return negatedPolynomial.next;
     }
 
+    public static int size(Node head){
+        int size = 0;
+        while (head != null) {
+            size++;
+            head = head.next;
+        }
+        return size;
+    }
+
     public static Node multiplyPolynomials(Node poly1, Node poly2) {
         Node productPolynomial = new Node(0,0);
-        //TODO
+        Node p1 = poly1;
+        Node p2 = poly2;
+        Node p3 = productPolynomial;
+        while(p1 != null) {
+            while(p2 != null) {
+                if(p2.getExponent() == 0 && p1.getExponent() != 0){
+                    p3.next = new Node(p1.getCoefficient() * p2.getCoefficient(), p1.getExponent());
+                }
+                if(p1.getExponent() == 0 && p2.getExponent() != 0) {
+                    p3.next = new Node(p1.getCoefficient() * p2.getCoefficient(), p2.getExponent());
+                }else {
+                    p3.next = new Node(p1.getCoefficient() * p2.getCoefficient(), p1.getExponent() + p2.getExponent());
+                }
+                p2 = p2.next;
+                p3 = p3.next;
+            }
+            p1 = p1.next;
+            p2 = poly2;
+        }
         return productPolynomial.next;
     }
 

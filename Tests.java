@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 public class Tests {
     @Test
-    public void addDifferentExponentTermsTest() throws Exception {
+    public void addDifferentExponentsTest() throws Exception {
         Polynomial poly = new Polynomial();
 
         Node poly1 = null;
@@ -25,7 +25,7 @@ public class Tests {
     }
 
     @Test
-    public void addSameExponentTermsTest() throws Exception {
+    public void addSameExponentsTest() throws Exception {
         Polynomial poly = new Polynomial();
 
         Node poly1 = null;
@@ -109,7 +109,7 @@ public class Tests {
     }
 
     @Test
-    public void addSingleLikeTermPolynomialsTest() throws Exception {
+    public void addSingleLikeExponentPolynomialsTest() throws Exception {
         Polynomial poly = new Polynomial();
         Node poly1 = new Node(3,3);
         Node poly2 = new Node(3,3);
@@ -120,7 +120,20 @@ public class Tests {
     }
 
     @Test
-    public void addMultipleLikeTermPolynomialsTest() throws Exception {
+    public void addSingleTermDifferentExponentPolynomialsTest() throws Exception {
+        Polynomial poly = new Polynomial();
+
+        Node poly1 = new Node(3,5);
+        Node poly2 = new Node(7,4);
+
+        Node sum = poly. addPolynomials(poly1, poly2);
+
+        Assertions.assertEquals(3, sum.getCoefficient());
+        Assertions.assertEquals(7, sum.next.getCoefficient());
+    }
+
+    @Test
+    public void addMultipleLikeExponentPolynomialsTest() throws Exception {
         Polynomial poly = new Polynomial();
 
         Node poly1 =      new Node(3,3);
@@ -138,7 +151,7 @@ public class Tests {
     }
 
     @Test
-    public void addMultipleDifferentTermPolynomialsTest() throws Exception {
+    public void addMultipleDifferentExponentPolynomialsTest() throws Exception {
         Polynomial poly = new Polynomial();
 
         Node poly1 =      new Node(3,5);
@@ -159,20 +172,7 @@ public class Tests {
     }
 
     @Test
-    public void addSingleTermDifferentExponentPolynomialsTest() throws Exception {
-        Polynomial poly = new Polynomial();
-
-        Node poly1 = new Node(3,5);
-        Node poly2 = new Node(7,4);
-
-        Node sum = poly. addPolynomials(poly1, poly2);
-
-        Assertions.assertEquals(3, sum.getCoefficient());
-        Assertions.assertEquals(7, sum.next.getCoefficient());
-    }
-
-    @Test
-    public void subtractSingleTermDifferentPolynomialsTest() throws Exception {
+    public void subtractSingleTermDifferentExponentPolynomialsTest() throws Exception {
         Polynomial poly = new Polynomial();
 
         Node poly1 = new Node(3,5);
@@ -187,7 +187,7 @@ public class Tests {
     }
 
     @Test
-    public void subtractSingleNegativeDifferentExponentsDifferentPolynomialsTest() throws Exception {
+    public void subtractNegativeSingleTermDifferentExponentsPolynomialsTest() throws Exception {
         Polynomial poly = new Polynomial();
 
         Node poly1 = new Node(-3,5);
@@ -203,7 +203,16 @@ public class Tests {
 
     @Test
     public void subtractSingleTermSameExponentsPolynomialsTest() throws Exception {
-        //TODO
+        Polynomial poly = new Polynomial();
+
+        Node poly1 = new Node(6,4);
+        Node poly2 = new Node(-5,4);
+
+        Node negatedPoly2 = poly.negatePolynomial(poly2);
+
+        Node difference = poly.addPolynomials(poly1, negatedPoly2);
+
+        Assertions.assertEquals(11, difference.getCoefficient());
     }
 
     @Test
@@ -236,9 +245,49 @@ public class Tests {
 
         Node difference = poly.addPolynomials(poly1, negatedPolynomial2);
 
-        Assertions.assertEquals(-4, difference.getCoefficient());
-        Assertions.assertEquals(-5, difference.next.getCoefficient());
-        Assertions.assertEquals(-2, difference.next.next.getCoefficient());
+        Assertions.assertEquals(4, difference.getCoefficient());
+    }
+
+
+    @Test
+    public void subtractAllNegativePolynomialsTest() throws Exception {
+        Polynomial poly = new Polynomial();
+
+        Node poly1 = new Node(-3,3);
+        poly1.next = new Node(-4,2);
+        poly1.next.next = new Node(-1,1);
+        Node poly2 = new Node(-7,3);
+        poly2.next = new Node(-2,2);
+        poly2.next.next = new Node(-10,1);
+
+        Node negatedPolynomial2 = poly.negatePolynomial(poly2);
+
+        Node difference = poly.addPolynomials(poly1, negatedPolynomial2);
+
+        Assertions.assertEquals(4, difference.getCoefficient());
+        Assertions.assertEquals(-2, difference.next.getCoefficient());
+        Assertions.assertEquals(9, difference.next.next.getCoefficient());
+    }
+
+    @Test
+    public void nullSizePolynomialsTest() throws Exception {
+        Polynomial poly = new Polynomial();
+
+        Node poly1 = null;
+
+        Assertions.assertEquals(0, poly.size(poly1));
+    }
+
+    @Test
+    public void SizePolynomialsTest() throws Exception {
+        Polynomial poly = new Polynomial();
+
+        Node poly1 = new Node(0,0);
+        poly1.next = new Node(0,0);
+        poly1.next.next = new Node(0,0);
+        poly1.next.next.next = new Node(0,0);
+
+        Assertions.assertEquals(4, poly.size(poly1));
     }
 }
 
