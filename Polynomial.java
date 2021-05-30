@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.Scanner;
 
 public class Polynomial {
@@ -12,8 +13,8 @@ public class Polynomial {
                              "Enter 3 to  delete term from polynomial 1.\n" +
                              "Enter 4 to delete a term from polynomial 2.\n" +
                              "Enter 5 to get the sum of the polynomials.\n" +
-                             "Enter 6 \n" +
-                             "Enter 7 \n" +
+                             "Enter 6 to get the difference of the polynomials\n" +
+                             "Enter 7 to get the product of the polynomials\n" +
                              "Enter 8 \n" +
                              "Enter 9  to quit.\n" +
                              "Selection: ");
@@ -50,7 +51,10 @@ public class Polynomial {
                 print(sum);
             }
             if(selection == 6) {
-                //TODO
+                Node negatedPolynomial2 = negatePolynomial(polynomial2);
+                Node difference = addPolynomials(polynomial1,negatedPolynomial2);
+                System.out.print("Difference: ");
+                print(difference);
             }
             if(selection == 7) {
                 //TODO
@@ -67,15 +71,6 @@ public class Polynomial {
             print(polynomial2);
         }
 
-    }
-
-    public static int size(Node node){
-        int size = 0;
-        while (node != null) {
-            size++;
-            node = node.next;
-        }
-        return size;
     }
 
     public static Node addTerm(Node head, Node newTerm) {
@@ -129,35 +124,51 @@ public class Polynomial {
         return head;
     }
 
-    public static Node addPolynomials(Node head1, Node head2) {
+    public static Node addPolynomials(Node poly1, Node poly2) {
         Node sumPolynomial = new Node(0,0);
-        Node p1 = head1;
-        Node p2 = head2;
         Node p3 = sumPolynomial;
 
-        while(p1 != null && p2 != null) {
-            if(p1 == null) {
-                p3.next = new Node(p2.getCoefficient(),p2.getExponent());
+        while(true) {
+            if(poly1 == null) {
+                p3.next = poly2;
                 break;
             }
-            if(p2 == null) {
-                p3.next = new Node(p1.getCoefficient(),p1.getExponent());
+            if(poly2 == null) {
+                p3.next = poly1;
                 break;
             }
-            if(p1.getExponent() < p2.getExponent()) {
-                p3.next = new Node(p2.getCoefficient(), p2.getExponent());
-                p2 = p2.next;
-            }else if (p1.getExponent() > p2.getExponent()) {
-                p3.next = new Node(p1.getCoefficient(),p1.getExponent());
-                p1 = p1.next;
-            }else if(p1.getExponent() == p2.getExponent()) {
-                p3.next =  new Node(p2.getCoefficient() + p1.getCoefficient(),p1.getExponent());
-                p1 = p1.next;
-                p2 = p2.next;
+            if(poly1.getExponent() < poly2.getExponent()) {
+                p3.next = new Node(poly2.getCoefficient(), poly2.getExponent());
+                poly2 = poly2.next;
+            }else if (poly1.getExponent() > poly2.getExponent()) {
+                p3.next = new Node(poly1.getCoefficient(),poly1.getExponent());
+                poly1 = poly1.next;
+            }else if(poly1.getExponent() == poly2.getExponent()) {
+                p3.next =  new Node(poly2.getCoefficient() + poly1.getCoefficient(),poly1.getExponent());
+                poly1 = poly1.next;
+                poly2 = poly2.next;
             }
             p3 = p3.next;
         }
         return sumPolynomial.next;
+    }
+
+    public static Node negatePolynomial(Node poly2) {
+        Node negatedPolynomial = new Node(0,0);
+        Node p1 = negatedPolynomial;
+        while (poly2 != null) {
+            p1.next = new Node((poly2.getCoefficient() * -1), poly2.getExponent());
+            poly2 = poly2.next;
+            p1 = p1.next;
+
+        }
+        return negatedPolynomial.next;
+    }
+
+    public static Node multiplyPolynomials(Node poly1, Node poly2) {
+        Node productPolynomial = new Node(0,0);
+        //TODO
+        return productPolynomial.next;
     }
 
     private static void print(Node head) {
