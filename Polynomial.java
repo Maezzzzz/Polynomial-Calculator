@@ -189,27 +189,33 @@ public class Polynomial {
     }
 
     public static Node multiplyPolynomials(Node poly1, Node poly2) {
-        Node productPolynomial = new Node(0,0);
+        Node productPolynomial = null;
         Node p1 = poly1;
         Node p2 = poly2;
-        Node p3 = productPolynomial;
         while(p1 != null) {
             while(p2 != null) {
                 if(p2.getExponent() == 0 && p1.getExponent() != 0){
-                    p3.next = new Node(p1.getCoefficient() * p2.getCoefficient(), p1.getExponent());
-                }
-                if(p1.getExponent() == 0 && p2.getExponent() != 0) {
-                    p3.next = new Node(p1.getCoefficient() * p2.getCoefficient(), p2.getExponent());
+                    Node temp = new Node(p1.getCoefficient() * p2.getCoefficient(), p1.getExponent());
+                    productPolynomial = addTerm(productPolynomial,temp);
+                }else if(p1.getExponent() == 0 && p2.getExponent() != 0) {
+                    Node temp = new Node(p1.getCoefficient() * p2.getCoefficient(), p2.getExponent());
+                    productPolynomial = addPolynomials(productPolynomial, temp);
                 }else {
-                    p3.next = new Node(p1.getCoefficient() * p2.getCoefficient(), p1.getExponent() + p2.getExponent());
+                    Node temp = new Node(p1.getCoefficient() * p2.getCoefficient(), p1.getExponent() + p2.getExponent());
+                    productPolynomial = addPolynomials(productPolynomial,temp);
                 }
                 p2 = p2.next;
-                p3 = p3.next;
             }
             p1 = p1.next;
             p2 = poly2;
         }
-        return productPolynomial.next;
+        return productPolynomial;
+    }
+
+    public static Node dividePolynomials(Node poly1, Node poly2) {
+        Node quotientPolynomial = new Node(0,0);
+
+        return quotientPolynomial.next;
     }
 
     private static void print(Node head) {
