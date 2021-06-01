@@ -334,4 +334,3 @@ public class Tests {
         Assertions.assertEquals(3, product.next.next.next.getExponent());
     }
 }
-
