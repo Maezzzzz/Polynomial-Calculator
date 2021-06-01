@@ -1,90 +1,16 @@
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 
 public class Polynomial {
-    static Scanner keyboard = new Scanner(System.in);
-    public static void main(String[] args) {
-        Node polynomial1 = null;
-        Node polynomial2 = null;
-        int selection = 1;
-        while(selection != 9) {
-            System.out.print("Enter 1 to enter first polynomial.\n" +
-                             "Enter 2 to enter second polynomial.\n" +
-                             "Enter 3 to  delete term from polynomial 1.\n" +
-                             "Enter 4 to delete a term from polynomial 2.\n" +
-                             "Enter 5 to get the sum of the polynomials.\n" +
-                             "Enter 6 to get the difference of the polynomials.\n" +
-                             "Enter 7 to get the product of the polynomials.\n" +
-                             "Enter 8 to get the quotient of the polynomials.\n" +
-                             "Enter 9 to erase polynomials.\n" +
-                             "Enter 10 to quit.\n" +
-                             "Selection: ");
-            selection = keyboard.nextInt();
-            if(selection == 1) {
-                System.out.print("Enter the coefficient of term: ");
-                int c = keyboard.nextInt();
-                System.out.print("Enter the exponent of term: ");
-                int e = keyboard.nextInt();
-                Node newTerm = new Node(c,e);
-                polynomial1 = addTerm(polynomial1, newTerm);
-            }
-            if(selection == 2) {
-                System.out.print("Enter the coefficient of term: ");
-                int c = keyboard.nextInt();
-                System.out.print("Enter the exponent of term: ");
-                int e = keyboard.nextInt();
-                Node newTerm = new Node(c,e);
-                polynomial2 = addTerm(polynomial2, newTerm);
-            }
-            if(selection == 3) {
-                System.out.print("Enter the exponent of term to be deleted: ");
-                int e = keyboard.nextInt();
-                polynomial1 = deleteTerm(polynomial1,e);
-            }
-            if(selection == 4) {
-                System.out.print("Enter the exponent of term to be deleted: ");
-                int e = keyboard.nextInt();
-                polynomial2 = deleteTerm(polynomial2,e);
-            }
-            if(selection == 5) {
-                Node sum = addPolynomials(polynomial1,polynomial2);
-                System.out.print("Sum: ");
-                print(sum);
-            }
-            if(selection == 6) {
-                Node negatedPolynomial2 = negatePolynomial(polynomial2);
-                Node difference = addPolynomials(polynomial1,negatedPolynomial2);
-                System.out.print("Difference: ");
-                print(difference);
-            }
-            if(selection == 7) {
-                int polynomial1Size = size(polynomial1);
-                int polynomial2Size = size(polynomial2);
-                Node productPolynomial;
-                if(polynomial1Size < polynomial2Size || polynomial1Size == polynomial2Size) {
-                    productPolynomial = multiplyPolynomials(polynomial1, polynomial2);
-                }else {
-                    productPolynomial = multiplyPolynomials(polynomial2, polynomial1);
-                }
-                System.out.print("Product: ");
-                print(productPolynomial);
-            }
-            if(selection == 8) {
-                //TODO
-            }
-            if(selection == 9) {
-                polynomial1 = null;
-                polynomial2 = null;
-            }
-            if(selection == 10) {
-                System.exit(0);
-            }
-            System.out.print("Poly 1: ");
-            print(polynomial1);
-            System.out.print("Poly 2: ");
-            print(polynomial2);
-        }
+    static Node polynomial1 = null;
+    static Node polynomial2 = null;
+    static final Scanner keyboard = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        gui();
     }
 
     public static Node addTerm(Node head, Node newTerm) {
@@ -212,32 +138,177 @@ public class Polynomial {
         return productPolynomial;
     }
 
-    public static Node dividePolynomials(Node poly1, Node poly2) {
-        Node quotientPolynomial = new Node(0,0);
-
-        return quotientPolynomial.next;
-    }
-
-    private static void print(Node head) {
-        String polynomial = "";
-        if(head == null) {
-            System.out.println(polynomial);
-        }else {
+    private static StringBuilder print(Node head) {
+        StringBuilder polynomial = new StringBuilder();
+        if (head != null) {
             Node ptr = head;
-            if(ptr.next == null) {
-                polynomial += (ptr.getCoefficient() + "x^" + ptr.getExponent());
-            }else {
-                while(ptr.next != null) {
+            if (ptr.next == null) {
+                polynomial.append(ptr.getCoefficient()).append("x^").append(ptr.getExponent());
+            } else {
+                while (ptr.next != null) {
                     if (ptr.next.getCoefficient() > 0) {
-                        polynomial += (ptr.getCoefficient() + "x^" + ptr.getExponent() + "+");
-                    }else {
-                        polynomial += (ptr.getCoefficient() + "x^" + ptr.getExponent() );
+                        polynomial.append(ptr.getCoefficient()).append("x^").append(ptr.getExponent()).append("+");
+                    } else {
+                        polynomial.append(ptr.getCoefficient()).append("x^").append(ptr.getExponent());
                     }
                     ptr = ptr.next;
                 }
-                polynomial += (ptr.getCoefficient() + "x^" + ptr.getExponent());
+                polynomial.append(ptr.getCoefficient()).append("x^").append(ptr.getExponent());
             }
-            System.out.println(polynomial);
         }
+        return polynomial;
+    }
+
+    public static void gui() {
+        JFrame frame = new JFrame("Polynomial Calculator");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JLabel polynomial1Label = new JLabel("Polynomial 1:");
+        JLabel polynomial1Print = new JLabel("");
+
+        JLabel polynomial2Label = new JLabel("Polynomial 2:");
+        JLabel polynomial2Print = new JLabel("");
+
+        JLabel sumLabel = new JLabel("Sum:");
+        JLabel sumPrint = new JLabel("");
+
+        JLabel differenceLabel = new JLabel("Difference:");
+        JLabel differencePrint = new JLabel("");
+
+        JLabel productLabel = new JLabel("Product:");
+        JLabel productPrint = new JLabel("");
+
+        JButton addTermToPolynomial1 = new JButton("Add a term to polynomial 1");
+        addTermToPolynomial1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame();
+                String coefficient = JOptionPane.showInputDialog(frame, "Enter Coefficient:");
+                String exponent = JOptionPane.showInputDialog(frame, "Enter Exponent:");
+                Node temp = new Node(Integer.valueOf(coefficient), Integer.valueOf(exponent));
+                polynomial1 = addTerm(polynomial1, temp);
+                polynomial1Print.setText(print(polynomial1).toString());
+                sumPrint.setText("");
+                differencePrint.setText("");
+                productPrint.setText("");
+            }
+        });
+
+        JButton deleteTermFromPolynomial1 = new JButton("Delete a term from polynomial 1");
+        deleteTermFromPolynomial1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame();
+                String exponent = JOptionPane.showInputDialog(frame, "Enter Exponent of term to be deleted:");
+                polynomial1 = deleteTerm(polynomial1, Integer.valueOf(exponent));
+                polynomial1Print.setText(print(polynomial1).toString());
+                sumPrint.setText("");
+                differencePrint.setText("");
+                productPrint.setText("");
+            }
+        });
+
+        JButton addTermToPolynomial2 = new JButton("Add a term to polynomial 2");
+        addTermToPolynomial2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame();
+                String coefficient = JOptionPane.showInputDialog(frame, "Enter Coefficient:");
+                String exponent = JOptionPane.showInputDialog(frame, "Enter Exponent:");
+                Node temp = new Node(Integer.valueOf(coefficient), Integer.valueOf(exponent));
+                polynomial2 = addTerm(polynomial2, temp);
+                polynomial2Print.setText(print(polynomial2).toString());
+                sumPrint.setText("");
+                differencePrint.setText("");
+                productPrint.setText("");
+            }
+        });
+
+        JButton deleteTermFromPolynomial2 = new JButton("Delete a term from polynomial 2");
+        deleteTermFromPolynomial2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame();
+                String exponent = JOptionPane.showInputDialog(frame, "Enter Exponent of term to be deleted:");
+                polynomial2 = deleteTerm(polynomial2, Integer.valueOf(exponent));
+                polynomial2Print.setText(print(polynomial2).toString());
+                sumPrint.setText("");
+                differencePrint.setText("");
+                productPrint.setText("");
+            }
+        });
+
+        JButton sumOfPolynomials = new JButton("Calculate sum");
+        sumOfPolynomials.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Node sum = addPolynomials(polynomial1, polynomial2);
+                sumPrint.setText(print(sum).toString());
+            }
+        });
+
+        JButton differenceOfPolynomials = new JButton("Calculate difference");
+        differenceOfPolynomials.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Node negatedPolynomial2 = negatePolynomial(polynomial2);
+                Node difference = addPolynomials(polynomial1, negatedPolynomial2);
+                differencePrint.setText(print(difference).toString());
+            }
+        });
+
+        JButton productOfPolynomials = new JButton("Calculate product");
+        productOfPolynomials.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int poly1Size = size(polynomial1);
+                int poly2Size = size(polynomial2);
+                Node product = null;
+                if(poly2Size < poly1Size) {
+                    product = multiplyPolynomials(polynomial2,polynomial1);
+                }else {
+                    product = multiplyPolynomials(polynomial1, polynomial2);
+                }
+                productPrint.setText(print(product).toString());
+            }
+        });
+
+        JButton quotientOfPolynomials = new JButton("Calculate quotient(to be added)");
+
+        quotientOfPolynomials.setEnabled(false);
+
+        frame.add(polynomial1Label);
+        frame.add(polynomial1Print);
+
+        frame.add(polynomial2Label);
+        frame.add(polynomial2Print);
+
+        frame.add(sumLabel);
+        frame.add(sumPrint);
+
+        frame.add(differenceLabel);
+        frame.add(differencePrint);
+        frame.add(productLabel);
+        frame.add(productPrint);
+
+        frame.add(addTermToPolynomial1);
+        frame.add(deleteTermFromPolynomial1);
+
+        frame.add(addTermToPolynomial2);
+        frame.add(deleteTermFromPolynomial2);
+
+        frame.add(sumOfPolynomials);
+
+        frame.add(differenceOfPolynomials);
+
+        frame.add(productOfPolynomials);
+
+        frame.add(quotientOfPolynomials);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new GridLayout(9,2));
+        frame.setSize(550, 300);
+        frame.setVisible(true);
     }
 }
